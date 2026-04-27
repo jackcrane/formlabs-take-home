@@ -19,9 +19,9 @@ def hello_server():
         pathToPreformServer=pathToPreformServer
     ) as preform:
         scene = preform.api.create_scene(SceneTypeModel(Manual(
-            machine_type="Form 4BL",
-            material_code="FLRG1011",
-            layer_thickness_mm=ManualLayerThicknessMm("0.1"),
+            machine_type="FRML-4-0",
+            material_code="FLPTB101",
+            layer_thickness_mm=ManualLayerThicknessMm("0.05"),
             print_setting="DEFAULT",
         )))
 
