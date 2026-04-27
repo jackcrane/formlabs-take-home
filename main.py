@@ -48,15 +48,6 @@ def hello_server():
             )
         )
 
-        # Auto Layout
-        preform.api.auto_layout(
-            scene_id=scene.id,
-            auto_layout_request=models.AutoLayoutRequest(
-                mode="DENTAL",
-                lock_rotation=True
-            )
-        )
-
         # Auto Support
         preform.api.auto_support(
             scene_id=scene.id,
@@ -64,6 +55,15 @@ def hello_server():
                 density=0.85,
                 touchpoint_size_mm=0.55,
                 raft_type="MINI_RAFT"
+            )
+        )
+
+        # Auto Layout
+        preform.api.auto_layout(
+            scene_id=scene.id,
+            auto_layout_request=models.AutoLayoutRequest(
+                mode="DENTAL",
+                lock_rotation=True
             )
         )
 
