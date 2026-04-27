@@ -37,6 +37,19 @@ def hello_server():
                     )
                 )
 
+        # Auto orient
+        preform.api.auto_orient(
+            scene_id=scene.id,
+            auto_orient_request=models.AutoOrientRequest(
+                models.DentalMode(
+                    mode="DENTAL",
+                    tilt=15
+                )
+            )
+        )
+
+
+
         # Screenshot workspace
         preform.api.save_screenshot(
             scene_id = scene.id,
