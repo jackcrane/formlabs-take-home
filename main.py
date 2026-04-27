@@ -32,7 +32,7 @@ def hello_server():
                 preform.api.import_model(
                     scene_id=scene.id,
                     import_model_request=models.ImportModelRequest(
-                        file=str(file)
+                        file=str(file),
                         repair_behavior="REPAIR"
                     )
                 )
