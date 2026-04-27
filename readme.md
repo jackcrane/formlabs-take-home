@@ -35,3 +35,92 @@ scene = preform.api.create_scene(SceneTypeModel(Manual(
     print_setting="DEFAULT",
 )))
 ```
+
+### 3. Import STL files
+
+We should provide the files to the utility in a folder for ease of use, so we pull from the colocated `teeth` directory. As required by the take home spec, we also set the `repair_behavior` to `REPAIR` for each file.
+
+```python
+# Import teeth
+teeth_dir = pathlib.Path().resolve() / "teeth"
+
+for file in teeth_dir.iterdir():
+    if file.suffix.lower() == ".stl":
+        preform.api.import_model(
+            scene_id=scene.id,
+            import_model_request=models.ImportModelRequest(
+                file=str(file),
+                repair_behavior="REPAIR"
+            )
+        )
+```
+
+### 4. Auto-* the things
+
+Again, following the spec, we need to auto orient, layout, and support the scene. For orient and layout, we use dental mode.
+
+For auto orient, we use the `tilt` parameter to specify a -15 degree tilt. (I assumed a -15 degree tilt since the spec asks for "tip them *back* 15 degrees".)
+
+For auto layout, we set `lock_rotation` to `True` to ensure the tilt from the previous step is preserved.
+
+For auto support, we use the specified parameters from the spec.
+
+```python
+# Auto orient
+preform.api.auto_orient(
+    scene_id=scene.id,
+    auto_orient_request=models.AutoOrientRequest(
+        models.DentalMode(mode="DENTAL", tilt=-15)
+    )
+)
+
+# Auto Layout
+preform.api.auto_layout(
+    scene_id=scene.id,
+    auto_layout_request=models.AutoLayoutRequest(
+        mode="DENTAL",
+        lock_rotation=True
+    )
+)
+
+# Auto Support
+preform.api.auto_support(
+    scene_id=scene.id,
+    auto_support_request=models.AutoSupportRequest(
+        density=0.85,
+        touchpoint_size_mm=0.55,
+        raft_type="MINI_RAFT"
+    )
+)
+```
+
+Ultimately, I switched the order to generate supports before running auto layouts to prevent raft collisions.
+
+```python
+# Auto orient
+preform.api.auto_orient(
+    scene_id=scene.id,
+    auto_orient_request=models.AutoOrientRequest(
+        models.DentalMode(mode="DENTAL", tilt=-15)
+    )
+)
+
+# Auto Support
+preform.api.auto_support(
+    scene_id=scene.id,
+    auto_support_request=models.AutoSupportRequest(
+        density=0.85,
+        touchpoint_size_mm=0.55,
+        raft_type="MINI_RAFT"
+    )
+)
+
+# Auto Layout
+preform.api.auto_layout(
+    scene_id=scene.id,
+    auto_layout_request=models.AutoLayoutRequest(
+        mode="DENTAL",
+        lock_rotation=True
+    )
+)
+```
