@@ -16,6 +16,7 @@ def hello_server():
     with formlabs.PreFormApi.start_preform_server(
         pathToPreformServer=pathToPreformServer
     ) as preform:
+        # Create scene
         scene = preform.api.create_scene(SceneTypeModel(Manual(
             machine_type="FRML-4-0",
             material_code="FLPTB101",
@@ -23,7 +24,7 @@ def hello_server():
             print_setting="DEFAULT",
         )))
 
-
+        # Import teeth
         teeth_dir = pathlib.Path().resolve() / "teeth"
 
         for file in teeth_dir.iterdir():
@@ -32,9 +33,11 @@ def hello_server():
                     scene_id=scene.id,
                     import_model_request=models.ImportModelRequest(
                         file=str(file)
+                        repair_behavior="REPAIR"
                     )
                 )
 
+        # Screenshot workspace
         preform.api.save_screenshot(
             scene_id = scene.id,
             save_screenshot_request=models.SaveScreenshotRequest(
