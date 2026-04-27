@@ -13,8 +13,6 @@ def hello_server():
         print("Unsupported platform")
         sys.exit(1)
 
-    # api = formlabs.PreFormApi()
-
     with formlabs.PreFormApi.start_preform_server(
         pathToPreformServer=pathToPreformServer
     ) as preform:
