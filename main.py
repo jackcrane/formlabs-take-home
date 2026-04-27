@@ -48,13 +48,20 @@ def hello_server():
             )
         )
 
-
+        # Auto Layout
+        preform.api.auto_layout(
+            scene_id=scene.id,
+            auto_layout_request=models.AutoLayoutRequest(
+                mode="DENTAL",
+                lock_rotation=True
+            )
+        )
 
         # Screenshot workspace
         preform.api.save_screenshot(
             scene_id = scene.id,
             save_screenshot_request=models.SaveScreenshotRequest(
-                file=str(pathlib.Path().resolve() / "image.png")
+                file=str(pathlib.Path().resolve() / "image.png"),
             )
         )
 
