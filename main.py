@@ -23,12 +23,17 @@ def hello_server():
             print_setting="DEFAULT",
         )))
 
-        preform.api.import_model(
-            scene_id = scene.id,
-            import_model_request=models.ImportModelRequest(
-                file=str(pathlib.Path().resolve() / "benchy.stl")
-            )
-        )
+
+        teeth_dir = pathlib.Path().resolve() / "teeth"
+
+        for file in teeth_dir.iterdir():
+            if file.suffix.lower() == ".stl":
+                preform.api.import_model(
+                    scene_id=scene.id,
+                    import_model_request=models.ImportModelRequest(
+                        file=str(file)
+                    )
+                )
 
         preform.api.save_screenshot(
             scene_id = scene.id,
