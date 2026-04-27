@@ -57,6 +57,16 @@ def hello_server():
             )
         )
 
+        # Auto Support
+        preform.api.auto_support(
+            scene_id=scene.id,
+            auto_support_request=models.AutoSupportRequest(
+                density=0.85,
+                touchpoint_size_mm=0.55,
+                raft_type="MINI_RAFT"
+            )
+        )
+
         # Screenshot workspace
         preform.api.save_screenshot(
             scene_id = scene.id,
