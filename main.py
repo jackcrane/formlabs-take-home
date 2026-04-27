@@ -45,8 +45,8 @@ def hello_server():
             )
         )
 
-        print("Server running. Press ENTER to shut down...")
-        input()  # blocks here
+        # print("Server running. Press ENTER to shut down...")
+        # input()  # blocks here
 
 if __name__ == "__main__":
     hello_server()
