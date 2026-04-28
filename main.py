@@ -5,7 +5,7 @@ import sys
 from mock_printers import MOCK_PRINTERS
 from datetime import datetime
 from log import write_log
-from progressbar import ProgressBar
+from progressbar import ProgressBar, progressBarFromOperation
 
 def procedure():
     pathToPreformServer = None
@@ -59,10 +59,10 @@ def procedure():
                 )
                 import_pb.update()
 
-        print("Auto-orienting")
         # Auto orient
-        preform.api.auto_orient(
+        auto_orient_operation = preform.api.auto_orient(
             scene_id=scene.id,
+            var_async=True,
             auto_orient_request=models.AutoOrientRequest(
                 models.DentalMode(
                     mode="DENTAL",
@@ -70,36 +70,40 @@ def procedure():
                 )
             )
         )
+        progressBarFromOperation(preform, "Auto-orienting:  ", auto_orient_operation.operation_id, 0.66)
 
-        print("Auto-supporting")
         # Auto Support
-        preform.api.auto_support(
+        auto_support_operation = preform.api.auto_support(
             scene_id=scene.id,
+            var_async=True,
             auto_support_request=models.AutoSupportRequest(
                 density=0.85,
                 touchpoint_size_mm=0.55,
                 raft_type="MINI_RAFT"
             )
         )
+        progressBarFromOperation(preform, "Auto-supporting: ", auto_support_operation.operation_id, 0.66)
 
-        print("Auto-layout")
         # Auto Layout
-        preform.api.auto_layout(
+        auto_layout_operation = preform.api.auto_layout(
             scene_id=scene.id,
+            var_async=True,
             auto_layout_request=models.AutoLayoutRequest(
                 mode="DENTAL",
                 lock_rotation=True
             )
         )
+        progressBarFromOperation(preform, "Auto-layout:     ", auto_layout_operation.operation_id, 0.66)
 
-        print("Saving file")
         # Save file
-        preform.api.save_form_file(
+        saving_operation = preform.api.save_form_file(
             scene_id=scene.id,
+            var_async=True,
             load_form_file_request=models.LoadFormFileRequest(
                 file=str(pathlib.Path().resolve() / (filename + "-B1.form"))
             )
         )
+        progressBarFromOperation(preform, "Saving:          ", saving_operation.operation_id, 0.66)
 
         print("Loading connected devices")
         # Get devices
