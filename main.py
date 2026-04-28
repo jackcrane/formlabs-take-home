@@ -105,6 +105,7 @@ def hello_server():
           choice = input("Press 'm' to load mock printers or any other key to exit: ").strip().lower()
           if choice != "m":
               return
+          print("You are using mock printer data. This will allow you to pick from a list of fake printers. This will call the print API call to fail.")
           printers = MOCK_PRINTERS
 
         # Display options
@@ -124,7 +125,14 @@ def hello_server():
             except ValueError:
                 print("Enter a number.")
 
-        print(f"\nSelected: {selected.product_name} ({selected.id})")
+        # Upload a print to the printer
+        preform.api.call_print(
+            scene_id=scene.id,
+            print_request=models.PrintRequest(
+                printer=selected.ip_address,
+                job_name="Test Job"
+            )
+        )
 
 
 if __name__ == "__main__":
