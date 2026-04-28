@@ -83,14 +83,6 @@ def procedure():
             )
         )
 
-        # Screenshot workspace
-        preform.api.save_screenshot(
-            scene_id = scene.id,
-            save_screenshot_request=models.SaveScreenshotRequest(
-                file=str(pathlib.Path().resolve() / (filename + ".png")),
-            )
-        )
-
         # Save file for sanity checking
         preform.api.save_form_file(
             scene_id=scene.id,
