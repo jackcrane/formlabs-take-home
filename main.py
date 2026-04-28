@@ -16,6 +16,14 @@ def hello_server():
     with formlabs.PreFormApi.start_preform_server(
         pathToPreformServer=pathToPreformServer
     ) as preform:
+        # In the background, discover printers so the discovery process is over when we are ready to print
+        preform.api.discover_devices(
+            var_async=True,
+            discover_devices_request=models.DiscoverDevicesRequest(
+                timeout_seconds=60
+            )
+        )
+
         # Create scene
         scene = preform.api.create_scene(SceneTypeModel(Manual(
             machine_type="FRML-4-0",
@@ -85,6 +93,34 @@ def hello_server():
                 file=str(pathlib.Path().resolve() / "plate.form")
             )
         )
+
+        printers = preform.api.get_devices(
+            can_print=True,
+        )
+
+        if printers.count == 0:
+            print("No available printers.")
+            return
+
+        # Display options
+        print("\nAvailable printers:")
+        for i, p in enumerate(printers.devices):
+            print(f"[{i}] {p.product_name} | {p.status} | {p.ip_address}")
+
+        # Selection loop
+        selected = None
+        while selected is None:
+            try:
+                choice = int(input("Select printer index: ").strip())
+                if 0 <= choice < len(printers.devices):
+                    selected = printers.devices[choice]
+                else:
+                    print("Invalid index.")
+            except ValueError:
+                print("Enter a number.")
+
+        print(f"\nSelected: {selected.product_name} ({selected.id})")
+
 
         # print("Server running. Press ENTER to shut down...")
         # input()  # blocks here
