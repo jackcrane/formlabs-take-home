@@ -10,7 +10,7 @@ source .venv/bin/activate
 pip install git+https://github.com/Formlabs/formlabs-api-python.git#subdirectory=local-api/lib
 ```
 
-Download the Preform Server binary and place it in the same directory as this readme. Place the STL files in a folder called `Take Home Challenge STL repo` in the same directory as this readme.
+Download the Preform Server binary and place it in the same directory as this readme. Place the STL files in a folder called `Take Home Challenge STL repo` in the same directory as this readme. (the files supplied in the spec are included already)
 
 Run the server with:
 
