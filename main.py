@@ -78,6 +78,14 @@ def hello_server():
             )
         )
 
+        # Save file for sanity checking
+        preform.api.save_form_file(
+            scene_id=scene.id,
+            load_form_file_request=models.LoadFormFileRequest(
+                file=str(pathlib.Path().resolve() / "plate.form")
+            )
+        )
+
         # print("Server running. Press ENTER to shut down...")
         # input()  # blocks here
 
