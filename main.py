@@ -5,6 +5,7 @@ import sys
 from mock_printers import MOCK_PRINTERS
 from datetime import datetime
 from log import write_log
+from progressbar import ProgressBar
 
 def procedure():
     pathToPreformServer = None
@@ -31,6 +32,7 @@ def procedure():
         )
 
         # Create scene
+        print("Creating Scene")
         scene = preform.api.create_scene(SceneTypeModel(Manual(
             machine_type="FRML-4-0",
             material_code="FLPTB101",
@@ -40,7 +42,9 @@ def procedure():
 
         # Import teeth
         teeth_dir = pathlib.Path().resolve() / "teeth"
+        files = [f for f in teeth_dir.iterdir() if f.suffix.lower() == ".stl"]
 
+        import_pb = ProgressBar(total=len(files), prefix="Importing files: ", suffix="Complete")
         for file in teeth_dir.iterdir():
             if file.suffix.lower() == ".stl":
                 preform.api.import_model(
@@ -53,7 +57,9 @@ def procedure():
                         )
                     )
                 )
+                import_pb.update()
 
+        print("Auto-orienting")
         # Auto orient
         preform.api.auto_orient(
             scene_id=scene.id,
@@ -65,6 +71,7 @@ def procedure():
             )
         )
 
+        print("Auto-supporting")
         # Auto Support
         preform.api.auto_support(
             scene_id=scene.id,
@@ -75,6 +82,7 @@ def procedure():
             )
         )
 
+        print("Auto-layout")
         # Auto Layout
         preform.api.auto_layout(
             scene_id=scene.id,
@@ -84,6 +92,7 @@ def procedure():
             )
         )
 
+        print("Saving file")
         # Save file
         preform.api.save_form_file(
             scene_id=scene.id,
@@ -92,6 +101,7 @@ def procedure():
             )
         )
 
+        print("Loading connected devices")
         # Get devices
         printers = preform.api.get_devices(
             can_print=True,
