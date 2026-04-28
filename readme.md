@@ -1,10 +1,30 @@
 # Formlabs technical interview content
 
+**HOW TO TEST/RUN**
+
+## Set up environment
+
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
 pip install git+https://github.com/Formlabs/formlabs-api-python.git#subdirectory=local-api/lib
 ```
+
+Download the Preform Server binary and place it in the same directory as this readme. Place the STL files in a folder called `Take Home Challenge STL repo` in the same directory as this readme.
+
+Run the server with:
+
+```sh
+python3 main.py
+```
+
+If you do not want to move a version of the server binary into the folder, or you do not want to move the STL files folder, you can specify the paths to load those resources from in the arguments:
+
+```sh
+python3 main.py --server-path /path/to/server/binary --stl-path /path/to/stl/files
+```
+
+When you are done, leave the venv:
 
 ```sh
 deactivate
