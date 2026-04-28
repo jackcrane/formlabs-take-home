@@ -2,6 +2,7 @@ import formlabs_local_api as formlabs
 from formlabs_local_api import Manual, ManualLayerThicknessMm, SceneTypeModel, models
 import pathlib
 import sys
+from mock_printers import MOCK_PRINTERS
 
 def hello_server():
     pathToPreformServer = None
@@ -100,8 +101,11 @@ def hello_server():
         )
 
         if printers.count == 0:
-            print("No available printers.")
-            return
+          print("No available printers.")
+          choice = input("Press 'm' to load mock printers or any other key to exit: ").strip().lower()
+          if choice != "m":
+              return
+          printers = MOCK_PRINTERS
 
         # Display options
         print("\nAvailable printers:")
@@ -122,9 +126,6 @@ def hello_server():
 
         print(f"\nSelected: {selected.product_name} ({selected.id})")
 
-
-        # print("Server running. Press ENTER to shut down...")
-        # input()  # blocks here
 
 if __name__ == "__main__":
     hello_server()
