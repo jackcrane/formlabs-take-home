@@ -143,3 +143,34 @@ preform.api.import_model(
     )
 )
 ```
+
+### 6. Load printers
+
+Early in the file, we are going to add:
+
+```python
+preform.api.discover_devices(
+    var_async=True,
+    discover_devices_request=models.DiscoverDevicesRequest(
+        timeout_seconds=60
+    )
+)
+```
+
+This way it can work in the background to discover printers while we are processing the rest of the scene.
+
+After the scene is ready, we will ask the user which printer they want to print on. I have included a fallback to allow the user to mock a printer in case there is not a printer available during testing.
+
+### 7. Print the scene
+
+Finally, we will send the print command to the printer.
+
+```python
+preform.api.call_print(
+    scene_id=scene.id,
+    print_request=models.PrintRequest(
+        printer=selected.ip_address,
+        job_name="Test Job"
+    )
+)
+```
