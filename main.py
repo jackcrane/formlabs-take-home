@@ -3,6 +3,7 @@ from formlabs_local_api import Manual, ManualLayerThicknessMm, SceneTypeModel, m
 import pathlib
 import sys
 from mock_printers import MOCK_PRINTERS
+from datetime import datetime
 
 def procedure():
     pathToPreformServer = None
@@ -17,6 +18,9 @@ def procedure():
     with formlabs.PreFormApi.start_preform_server(
         pathToPreformServer=pathToPreformServer
     ) as preform:
+        # Create a stable file name based on datetime
+        filename = datetime.now().strftime("%m-%d-%y_%H:%M:%S")
+
         # In the background, discover printers so the discovery process is over when we are ready to print
         preform.api.discover_devices(
             var_async=True,
@@ -83,7 +87,7 @@ def procedure():
         preform.api.save_screenshot(
             scene_id = scene.id,
             save_screenshot_request=models.SaveScreenshotRequest(
-                file=str(pathlib.Path().resolve() / "image.png"),
+                file=str(pathlib.Path().resolve() / (filename + ".png")),
             )
         )
 
@@ -91,7 +95,7 @@ def procedure():
         preform.api.save_form_file(
             scene_id=scene.id,
             load_form_file_request=models.LoadFormFileRequest(
-                file=str(pathlib.Path().resolve() / "plate.form")
+                file=str(pathlib.Path().resolve() / (filename + ".form"))
             )
         )
 
