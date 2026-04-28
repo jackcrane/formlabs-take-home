@@ -33,7 +33,10 @@ def hello_server():
                     scene_id=scene.id,
                     import_model_request=models.ImportModelRequest(
                         file=str(file),
-                        repair_behavior="REPAIR"
+                        repair_behavior="REPAIR",
+                        orientation=models.OrientationModel(
+                            models.EulerAnglesModel(x=180, y=0, z=0)
+                        )
                     )
                 )
 
