@@ -58,7 +58,7 @@ def procedure():
         )))
 
         # Import teeth
-        teeth_dir = pathlib.Path(args.stl_path) if args.stl_path else pathlib.Path().resolve() / "teeth"
+        teeth_dir = pathlib.Path(args.stl_path) if args.stl_path else pathlib.Path().resolve() / "Take Home Challenge STL repo"
         files = [f for f in teeth_dir.iterdir() if f.suffix.lower() == ".stl"]
 
         # Validate the teeth directory
