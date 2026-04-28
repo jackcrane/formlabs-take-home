@@ -4,7 +4,7 @@ import pathlib
 import sys
 from mock_printers import MOCK_PRINTERS
 
-def hello_server():
+def procedure():
     pathToPreformServer = None
     if sys.platform == 'win32':
         pathToPreformServer = pathlib.Path().resolve() / "PreFormServer/PreFormServer.exe"
@@ -136,4 +136,4 @@ def hello_server():
 
 
 if __name__ == "__main__":
-    hello_server()
+    procedure()
