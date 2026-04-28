@@ -6,15 +6,32 @@ from mock_printers import MOCK_PRINTERS
 from datetime import datetime
 from log import write_log
 from progressbar import ProgressBar, progressBarFromOperation
+import argparse
 
 def procedure():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--preform-server-path", type=str, help="Path to PreFormServer executable")
+    parser.add_argument("--stl-path", type=str, help="Path to STL folder", default=None)
+    args = parser.parse_args()
+
     pathToPreformServer = None
-    if sys.platform == 'win32':
-        pathToPreformServer = pathlib.Path().resolve() / "PreFormServer/PreFormServer.exe"
-    elif sys.platform == 'darwin':
-        pathToPreformServer = pathlib.Path().resolve() / "PreFormServer.app/Contents/MacOS/PreFormServer"
+    if args.preform_server_path:
+        pathToPreformServer = pathlib.Path(args.preform_server_path)
     else:
-        print("Unsupported platform")
+        if sys.platform == 'win32':
+            pathToPreformServer = pathlib.Path().resolve() / "PreFormServer/PreFormServer.exe"
+        elif sys.platform == 'darwin':
+            pathToPreformServer = pathlib.Path().resolve() / "PreFormServer.app/Contents/MacOS/PreFormServer"
+        else:
+            print("Unsupported platform")
+            sys.exit(1)
+
+    # Validate preform server path
+    if not pathToPreformServer.exists():
+        print("\nERROR: Unable to find a PreForm Server instance.")
+        print(f"Tried path: {pathToPreformServer}")
+        print('You can specify it manually with:')
+        print('  --preform-server-path "/path/to/PreFormServer"\n')
         sys.exit(1)
 
     with formlabs.PreFormApi.start_preform_server(
@@ -41,8 +58,16 @@ def procedure():
         )))
 
         # Import teeth
-        teeth_dir = pathlib.Path().resolve() / "teeth"
+        teeth_dir = pathlib.Path(args.stl_path) if args.stl_path else pathlib.Path().resolve() / "teeth"
         files = [f for f in teeth_dir.iterdir() if f.suffix.lower() == ".stl"]
+
+        # Validate the teeth directory
+        if not teeth_dir.exists() or not teeth_dir.is_dir():
+          print("\nERROR: STL folder not found.")
+          print(f"Tried path: {teeth_dir}")
+          print('You can specify it manually with:')
+          print('  --stl-path "/absolute/path/to/stl/folder"\n')
+          sys.exit(1)
 
         import_pb = ProgressBar(total=len(files), prefix="Importing files: ", suffix="Complete")
         for file in teeth_dir.iterdir():
@@ -147,7 +172,6 @@ def procedure():
                 job_name="Test Job"
             )
         )
-
 
 if __name__ == "__main__":
     procedure()

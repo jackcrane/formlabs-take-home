@@ -199,3 +199,7 @@ The spec provides no details on what the patient ID is, so in this case it just 
 ```python
 write_log(filename + "-B1.form")
 ```
+
+### 10. Quality of life
+
+Now that the core of the product is working, I have added a few small quality of life improvements: namely progress bars for the various Preform API calls to make the user experience feel better and to provide feedback to the user about waht is going on. I also added some very simple error handling to catch any issues that may be thrown when the project is being tested.
