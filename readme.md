@@ -124,3 +124,22 @@ preform.api.auto_layout(
     )
 )
 ```
+
+### 5. Ensure occlusal surfaces are facing away from the build surface
+
+The STL files have their occlusal surfaces facing down, but the spec calls for printing with them facing upwards (away from build tray). To fix this we run a rotate transform on each model at import time to rotate 180 degrees around the X axis.
+
+```python
+# Import teeth
+...
+preform.api.import_model(
+    scene_id=scene.id,
+    import_model_request=models.ImportModelRequest(
+        file=str(file),
+        repair_behavior="REPAIR",
+        orientation=models.OrientationModel(
+            models.EulerAnglesModel(x=180, y=0, z=0)
+        )
+    )
+)
+```
