@@ -4,6 +4,7 @@ import pathlib
 import sys
 from mock_printers import MOCK_PRINTERS
 from datetime import datetime
+from log import write_log
 
 def procedure():
     pathToPreformServer = None
@@ -120,6 +121,9 @@ def procedure():
                     print("Invalid index.")
             except ValueError:
                 print("Enter a number.")
+
+        # Write a log to the log csv file
+        write_log(filename + "-B1.form")
 
         # Upload a print to the printer
         preform.api.call_print(

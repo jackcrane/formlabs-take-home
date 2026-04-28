@@ -174,3 +174,28 @@ preform.api.call_print(
     )
 )
 ```
+
+### 8. Save the scene
+
+As required, we save the scene with the filename as defined in the spec
+
+```python
+filename = datetime.now().strftime("%m-%d-%y_%H:%M:%S")
+
+preform.api.save_form_file(
+    scene_id=scene.id,
+    load_form_file_request=models.LoadFormFileRequest(
+        file=str(pathlib.Path().resolve() / (filename + "-B1.form"))
+    )
+)
+```
+
+Filename being seperate is a relic from my testing, where I was also saving screenshots, and I wanted the file names to match. I left it this way because I think for future extensibility, it would be convinient to have a stable filename prefix that could be used to save other related files.
+
+### 9. Log the prints
+
+The spec provides no details on what the patient ID is, so in this case it just auto-increments. In a production environment, we would obviously use a real patient ID, and that would likely not be something we would want to auto-increment.
+
+```python
+write_log(filename + "-B1.form")
+```
