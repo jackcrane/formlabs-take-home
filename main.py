@@ -87,7 +87,7 @@ def procedure():
         preform.api.save_form_file(
             scene_id=scene.id,
             load_form_file_request=models.LoadFormFileRequest(
-                file=str(pathlib.Path().resolve() / (filename + ".form"))
+                file=str(pathlib.Path().resolve() / (filename + "-B1.form"))
             )
         )
 
