@@ -94,6 +94,7 @@ def hello_server():
             )
         )
 
+        # Get devices
         printers = preform.api.get_devices(
             can_print=True,
         )
